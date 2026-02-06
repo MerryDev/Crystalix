@@ -78,6 +78,10 @@ public class TeleportPlugin extends JavaPlugin {
         }, PaperCommandSource::commandSourceStack);
     }
 
+    public IgnoreManager ignoreManager() {
+        return ignoreManager;
+    }
+
     public ObjectMapper jsonMapper() {
         return mapper;
     }
