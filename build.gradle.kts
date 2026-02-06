@@ -18,11 +18,15 @@ dependencies {
     compileOnly(libs.paper)
     compileOnly(libs.brigadier)
     implementation(libs.bundles.cloud)
+    implementation(libs.jacksonbukkit)
 }
 
 tasks {
     shadowJar {
-        val mapping = mapOf("org.incendo.cloud" to "cloud")
+        val mapping = mapOf(
+            "org.incendo.cloud" to "cloud",
+            "de.eldoria.jacksonbukkit" to "jacksonbukkit"
+        )
         val base = "net.crystalix.teleport.libs"
         for ((pattern, name) in mapping) relocate(pattern, "$base.$name")
     }
