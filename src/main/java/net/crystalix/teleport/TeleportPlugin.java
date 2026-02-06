@@ -2,6 +2,7 @@ package net.crystalix.teleport;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.crystalix.teleport.command.TeleportCommand;
+import net.crystalix.teleport.command.TeleportIgnoreCommand;
 import net.crystalix.teleport.command.cloud.PaperCommandSource;
 import net.crystalix.teleport.command.cloud.PaperPlayerCommandSource;
 import net.kyori.adventure.key.Key;
@@ -48,6 +49,7 @@ public class TeleportPlugin extends JavaPlugin {
                 .buildOnEnable(this);
 
         new TeleportCommand(this).registerTo(commandManager);
+        new TeleportIgnoreCommand(this).registerTo(commandManager);
     }
 
     private @NotNull SenderMapper<CommandSourceStack, PaperCommandSource> senderMapper() {
