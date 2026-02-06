@@ -37,6 +37,7 @@ public class TeleportPlugin extends JavaPlugin {
 
         store.defaultLocale(Locale.GERMAN);
         store.registerAll(Locale.GERMAN, ResourceBundle.getBundle("messages", Locale.GERMANY, UTF8ResourceBundleControl.utf8ResourceBundleControl()), true);
+        store.registerAll(Locale.ENGLISH, ResourceBundle.getBundle("messages", Locale.US, UTF8ResourceBundleControl.utf8ResourceBundleControl()), true);
 
         GlobalTranslator.translator().addSource(store);
     }
