@@ -3,7 +3,6 @@ package net.crystalix.teleport.util;
 import net.crystalix.teleport.TeleportPlugin;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
