@@ -21,6 +21,7 @@ import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -38,15 +39,14 @@ public class TeleportPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        ignoreManager.readConfig();
-
+        readConfig();
         registerCommand();
         getLogger().info("TeleportPlugin wurde erfolgreich aktiviert");
     }
 
     @Override
     public void onDisable() {
-        ignoreManager.saveAll();
+        writeConfig();
     }
 
     private void createTranslations() {
@@ -76,6 +76,22 @@ public class TeleportPlugin extends JavaPlugin {
                     new PaperCommandSource(sender, commandSourceStack);
 
         }, PaperCommandSource::commandSourceStack);
+    }
+
+    private void readConfig() {
+        try {
+            ignoreManager.readConfig();
+        } catch (IOException exception) {
+            getLogger().severe("Fehler beim Lesen der Konfigurationsdatei: " + exception.getMessage());
+        }
+    }
+
+    private void writeConfig() {
+        try {
+            ignoreManager.saveAll();
+        } catch (IOException exception) {
+            getLogger().severe("Fehler beim Speichern der Konfigurationsdatei: " + exception.getMessage());
+        }
     }
 
     public IgnoreManager ignoreManager() {
