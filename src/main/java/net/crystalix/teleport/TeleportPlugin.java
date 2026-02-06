@@ -1,6 +1,7 @@
 package net.crystalix.teleport;
 
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import net.crystalix.teleport.command.TeleportCommand;
 import net.crystalix.teleport.command.cloud.PaperCommandSource;
 import net.crystalix.teleport.command.cloud.PaperPlayerCommandSource;
 import org.bukkit.command.CommandSender;
@@ -23,6 +24,8 @@ public class TeleportPlugin extends JavaPlugin {
         final PaperCommandManager<PaperCommandSource> commandManager = PaperCommandManager.builder(senderMapper())
                 .executionCoordinator(ExecutionCoordinator.<PaperCommandSource>builder().build())
                 .buildOnEnable(this);
+
+        new TeleportCommand(this).registerTo(commandManager);
     }
 
     private @NotNull SenderMapper<CommandSourceStack, PaperCommandSource> senderMapper() {
