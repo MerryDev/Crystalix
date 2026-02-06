@@ -37,6 +37,17 @@ public final class RequestManager {
         }, 20L * 5);
     }
 
+    public void acceptRequest(Player sender) {
+        final TeleportRequest request = requests.getOrDefault(sender, null);
+        if (request == null) return;
+
+        Player target = request.target();
+        if (!target.isOnline()) return;
+
+        target.teleport(sender);
+        cancelRequest(sender);
+    }
+
     public void ignoreRequest(Player sender) {
         final TeleportRequest request = requests.getOrDefault(sender, null);
         if (request == null) return;
