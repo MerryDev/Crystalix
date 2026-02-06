@@ -1,6 +1,7 @@
 package net.crystalix.teleport.util;
 
 import net.crystalix.teleport.TeleportPlugin;
+import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -8,6 +9,8 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static net.kyori.adventure.text.Component.translatable;
 
 public final class RequestManager {
 
@@ -31,8 +34,8 @@ public final class RequestManager {
             if (current == request) {
                 cancelRequest(sender);
 
-                if (sender.isOnline()) sender.sendMessage("<red>Deine Teleportanfrage ist abgelaufen.");
-                if (target.isOnline()) target.sendMessage("<red>Die Teleportanfrage von " + sender.getName() + " ist abgelaufen.");
+                if (sender.isOnline()) sender.sendMessage(translatable("command.request.timeout.out"));
+                if (target.isOnline()) target.sendMessage(translatable("command.request.timeout.in", Argument.component("name", sender.name())));
             }
         }, 20L * 5);
     }
@@ -44,8 +47,11 @@ public final class RequestManager {
         Player target = request.target();
         if (!target.isOnline()) return;
 
-        target.teleport(sender);
+        sender.teleport(target);
         cancelRequest(sender);
+
+        sender.sendMessage(translatable("command.request.accepted.out", Argument.component("name", target.name())));
+        target.sendMessage(translatable("command.request.accepted.in"));
     }
 
     public void ignoreRequest(Player sender) {
@@ -55,8 +61,8 @@ public final class RequestManager {
         Player target = request.target();
         cancelRequest(sender);
 
-        sender.sendMessage(target.getName() + " hat deine Anfrage abgelehnt.");
-        target.sendMessage("Du hast die Anfrage von " + sender.getName() + " abgelehnt.");
+        sender.sendMessage(translatable("command.request.denied.out", Argument.component("name", target.name())));
+        target.sendMessage(translatable("command.request.denied.in"));
     }
 
     public void cancelRequest(Player sender) {

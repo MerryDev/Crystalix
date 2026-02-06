@@ -5,10 +5,14 @@ import net.crystalix.teleport.command.cloud.PaperCommand;
 import net.crystalix.teleport.command.cloud.PaperCommandSource;
 import net.crystalix.teleport.command.cloud.PaperPlayerCommandSource;
 import net.crystalix.teleport.util.RequestManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.CommandManager;
 import org.jetbrains.annotations.NotNull;
 
+import static net.kyori.adventure.text.Component.translatable;
 import static org.incendo.cloud.bukkit.parser.PlayerParser.playerParser;
 
 public class TeleportCommand extends PaperCommand<TeleportPlugin> {
@@ -29,9 +33,25 @@ public class TeleportCommand extends PaperCommand<TeleportPlugin> {
                     final Player player = (Player) context.sender().plattformSender();
                     final Player target = context.getOrDefault("player", null);
 
+                    if (player.equals(target)) {
+                        player.sendMessage(translatable("command.request.error.self"));
+                        return;
+                    }
+
                     requestManager.createRequest(player, target);
-                    player.sendMessage("<green>Deine Teleportanfrage wurde erfolgreich gesendet.");
-                    target.sendMessage("<green>Du hast eine Teleportanfrage von " + player.getName() + " erhalten.");
+
+                    Component acceptButton = translatable("command.request.button.accept")
+                            .clickEvent(ClickEvent.callback(_ -> requestManager.acceptRequest(player)));
+                    Component denyButton = translatable("command.request.button.deny")
+                            .clickEvent(ClickEvent.callback(_ -> requestManager.ignoreRequest(player)));
+
+                    Component message = translatable("command.request.in",
+                            Argument.component("name", player.name()),
+                            Argument.component("accept", acceptButton),
+                            Argument.component("deny", denyButton));
+
+                    player.sendMessage(translatable("command.request.out"));
+                    target.sendMessage(message);
                 }));
     }
 }
