@@ -5,8 +5,6 @@ import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,9 +12,7 @@ import static net.kyori.adventure.text.Component.translatable;
 
 public final class RequestManager {
 
-    private static final long TIMEOUT = 60_000L; // 1 Minute
     private final Map<Player, TeleportRequest> requests = new ConcurrentHashMap<>();
-
     private final TeleportPlugin plugin;
 
     public RequestManager(TeleportPlugin plugin) {
@@ -24,7 +20,7 @@ public final class RequestManager {
     }
 
     public void createRequest(Player sender, Player target) {
-        final TeleportRequest request = new TeleportRequest(sender, target, Timestamp.from(Instant.now().plusMillis(TIMEOUT)));
+        final TeleportRequest request = new TeleportRequest(sender, target);
         requests.put(sender, request);
 
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -37,7 +33,7 @@ public final class RequestManager {
                 if (sender.isOnline()) sender.sendMessage(translatable("command.request.timeout.out"));
                 if (target.isOnline()) target.sendMessage(translatable("command.request.timeout.in", Argument.component("name", sender.name())));
             }
-        }, 20L * 5);
+        }, 20L * 60);
     }
 
     public void acceptRequest(Player sender) {
