@@ -50,7 +50,7 @@ public class TeleportPlugin extends JavaPlugin {
     }
 
     private void createTranslations() {
-        final MiniMessageTranslationStore store = MiniMessageTranslationStore.create(Key.key("magicmail:translations"));
+        final MiniMessageTranslationStore store = MiniMessageTranslationStore.create(Key.key("teleport:translations"));
 
         store.defaultLocale(Locale.GERMAN);
         store.registerAll(Locale.GERMAN, ResourceBundle.getBundle("messages", Locale.GERMANY, UTF8ResourceBundleControl.utf8ResourceBundleControl()), true);
